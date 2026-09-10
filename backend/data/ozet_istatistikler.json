@@ -1,0 +1,33 @@
+{
+  "toplam_ham_kayit": 15486,
+  "islenen_anakara_durak_sayisi": 15361,
+  "atlanilan_gecersiz_koordinat_sayisi": 0,
+  "atlanilan_ada_durak_sayisi": 118,
+  "atlanilan_mukerrer_durak_sayisi": 7,
+  "benzersiz_ilce_sayisi": 41,
+  "durak_tipleri_ozeti": {
+    "İETTBAYRAK": 6509,
+    "CCMODERN": 2258,
+    "AÇIK DURAK": 1430,
+    "İETTCAMLI": 1626,
+    "İSTON GENİŞ": 569,
+    "WALLMODERN": 782,
+    "IETT-C DAR TİP": 76,
+    "İSTON DAR_İBB": 50,
+    "İSTON DAR": 291,
+    "CCMODERNDR": 808,
+    "DİĞER": 194,
+    "İETTÜÇGEN": 52,
+    "OVAL KIRMIZI": 21,
+    "DAR OTURAKLI": 233,
+    "İSTON GENİŞ_İBB": 102,
+    "İETTMODERN": 194,
+    "BELDE TİPİ GENİŞ": 24,
+    "MEDYA A.Ş.": 6,
+    "ISTASYON": 98,
+    "İSTON PERON": 20,
+    "OVAL YEŞİL": 7,
+    "İETTSAC": 11
+  },
+  "islem_tarihi": "2026-09-10T19:28:44.142783"
+}
