@@ -1,69 +1,83 @@
 import React, { useState } from 'react';
-import { Search, MapPin, X, Filter, ChevronRight, BarChart2, Layers } from 'lucide-react';
+import { Search, MapPin, X, Filter, ChevronRight, BarChart2, ArrowLeft, Bus } from 'lucide-react';
 
 export default function Sidebar({
   districtsList = [],
   summaryStats = {},
   selectedDistrict = null,
-  onSelectDistrict = () => {},
+  onSelectDistrict = () => { },
   collapsed = false,
   allStops = [],
-  onSelectStop = () => {}
+  selectedStop = null,
+  onSelectStop = () => { }
 }) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [globalSearchTerm, setGlobalSearchTerm] = useState('');
+  const [globalSearchResults, setGlobalSearchResults] = useState([]);
+  const [districtFilterTerm, setDistrictFilterTerm] = useState('');
 
   const totalStopsCount = summaryStats.basariyla_islenen_durak_sayisi || 15361;
   const maxDistrictCount = districtsList.length > 0 ? districtsList[0].durak_sayisi : 1;
 
-  // Handle Search Input Change
-  const handleSearchChange = (e) => {
+  // Handle Global Search Input Change
+  const handleGlobalSearchChange = (e) => {
     const term = e.target.value;
-    setSearchTerm(term);
+    setGlobalSearchTerm(term);
 
     if (term.trim().length > 1) {
       const lower = term.toLowerCase();
-      // Search in stops (top 8 matches)
       const stopMatches = allStops
         .filter(s => s.adi && (s.adi.toLowerCase().includes(lower) || String(s.durak_kodu).includes(lower)))
-        .slice(0, 8);
+        .slice(0, 10);
 
-      setSearchResults(stopMatches);
+      setGlobalSearchResults(stopMatches);
     } else {
-      setSearchResults([]);
+      setGlobalSearchResults([]);
     }
   };
 
   const handleSelectSearchResult = (stop) => {
     onSelectStop(stop);
-    setSearchTerm(stop.adi);
-    setSearchResults([]);
+    setGlobalSearchTerm(stop.adi);
+    setGlobalSearchResults([]);
   };
+
+  // Get stops for the currently selected district
+  const districtStops = selectedDistrict
+    ? allStops.filter(s => String(s.ilce_id) === String(selectedDistrict.ilce_id))
+    : [];
+
+  // Filter stops within district if search query typed
+  const filteredDistrictStops = districtFilterTerm.trim()
+    ? districtStops.filter(s =>
+      (s.adi && s.adi.toLowerCase().includes(districtFilterTerm.toLowerCase())) ||
+      (s.durak_kodu && String(s.durak_kodu).includes(districtFilterTerm))
+    )
+    : districtStops;
 
   return (
     <aside className={`sidebar-panel ${collapsed ? 'collapsed' : ''}`}>
-      {/* Search Input Box */}
+      {/* Global Search Input Box */}
       <div className="search-box">
         <Search className="search-icon" size={18} />
         <input
           type="text"
           className="search-input"
-          placeholder="Durak adı, kodu veya ilçe ara..."
-          value={searchTerm}
-          onChange={handleSearchChange}
+          placeholder="Tüm İstanbul'da durak ara..."
+          value={globalSearchTerm}
+          onChange={handleGlobalSearchChange}
         />
-        {searchTerm && (
+        {globalSearchTerm && (
           <X
             size={16}
             style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', color: '#94a3b8' }}
-            onClick={() => { setSearchTerm(''); setSearchResults([]); }}
+            onClick={() => { setGlobalSearchTerm(''); setGlobalSearchResults([]); }}
           />
         )}
 
-        {/* Autocomplete Dropdown */}
-        {searchResults.length > 0 && (
+        {/* Global Autocomplete Dropdown */}
+        {globalSearchResults.length > 0 && (
           <div className="search-results-dropdown">
-            {searchResults.map(stop => (
+            {globalSearchResults.map(stop => (
               <div
                 key={stop.id || stop.durak_kodu}
                 className="search-result-item"
@@ -98,69 +112,128 @@ export default function Sidebar({
         </div>
       </div>
 
-      {/* Selected Filter Alert */}
-      {selectedDistrict && (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justify: 'space-between',
-            padding: '8px 12px',
-            background: 'rgba(59, 130, 246, 0.2)',
-            border: '1px solid rgba(59, 130, 246, 0.4)',
-            borderRadius: '10px',
-            fontSize: '0.8rem',
-            color: '#60a5fa'
-          }}
-        >
-          <span>Filtre: <strong>{selectedDistrict.ilce_adi}</strong> ({selectedDistrict.durak_sayisi} Durak)</span>
-          <button
-            onClick={() => onSelectDistrict(null)}
-            style={{ background: 'none', border: 'none', color: '#f8fafc', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem' }}
-          >
-            <X size={14} /> Temizle
-          </button>
+      {/* CONDITIONAL CONTENT VIEW */}
+      {selectedDistrict ? (
+        /* DISTRICT DETAIL & STOP LIST VIEW */
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 1, overflow: 'hidden' }}>
+          {/* Back button and District Title */}
+          <div className="district-detail-header">
+            <button
+              className="back-btn"
+              onClick={() => {
+                onSelectDistrict(null);
+                setDistrictFilterTerm('');
+              }}
+            >
+              <ArrowLeft size={14} /> Tüm İlçelere Dön
+            </button>
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '2px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <MapPin size={18} color="#3b82f6" />
+                <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff' }}>
+                  {selectedDistrict.ilce_adi}
+                </h3>
+              </div>
+              <span className="district-count" style={{ fontSize: '0.85rem' }}>
+                {districtStops.length} Durak
+              </span>
+            </div>
+          </div>
+
+          {/* District Stop Search Filter */}
+          <div style={{ position: 'relative' }}>
+            <input
+              type="text"
+              className="search-input"
+              style={{ padding: '8px 12px 8px 32px', fontSize: '0.8rem' }}
+              placeholder={`${selectedDistrict.ilce_adi} duraklarında ara...`}
+              value={districtFilterTerm}
+              onChange={(e) => setDistrictFilterTerm(e.target.value)}
+            />
+            <Filter size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
+            {districtFilterTerm && (
+              <X
+                size={14}
+                style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', color: '#94a3b8' }}
+                onClick={() => setDistrictFilterTerm('')}
+              />
+            )}
+          </div>
+
+          {/* List of Stops in Selected District */}
+          <div className="district-list-container">
+            {filteredDistrictStops.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '20px', fontSize: '0.8rem', color: '#94a3b8' }}>
+                Aradığınız kriterlere uygun durak bulunamadı.
+              </div>
+            ) : (
+              filteredDistrictStops.map((stop) => {
+                const isActive = selectedStop && (selectedStop.id === stop.id || selectedStop.durak_kodu === stop.durak_kodu);
+
+                return (
+                  <div
+                    key={stop.id || stop.durak_kodu}
+                    className={`stop-item ${isActive ? 'active' : ''}`}
+                    onClick={() => onSelectStop(stop)}
+                  >
+                    <div className="stop-header-row">
+                      <span className="stop-name">{stop.adi}</span>
+                      <span className="stop-code">Kod: {stop.durak_kodu}</span>
+                    </div>
+
+                    <div className="stop-meta-row">
+                      <span className="stop-badge">{stop.durak_tipi || 'Durak'}</span>
+                      <span style={{ fontSize: '0.7rem', color: '#64748b' }}>
+                        {stop.yon_bilgisi ? `Yön: ${stop.yon_bilgisi}` : ''}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      ) : (
+        /* ALL DISTRICTS OVERVIEW LIST VIEW */
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1, overflow: 'hidden' }}>
+          <div className="section-title">
+            <span>İlçe Durak Yoğunluğu ({districtsList.length})</span>
+            <BarChart2 size={16} />
+          </div>
+
+          <div className="district-list-container">
+            {districtsList.map((district) => {
+              const percentage = ((district.durak_sayisi / totalStopsCount) * 100).toFixed(1);
+              const progressPercent = Math.round((district.durak_sayisi / maxDistrictCount) * 100);
+
+              return (
+                <div
+                  key={district.ilce_id}
+                  className="district-item"
+                  onClick={() => onSelectDistrict(district)}
+                >
+                  <div className="district-row">
+                    <span className="district-name">{district.ilce_adi}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>%{percentage}</span>
+                      <span className="district-count">{district.durak_sayisi}</span>
+                    </div>
+                  </div>
+
+                  {/* Visual Progress Bar */}
+                  <div className="progress-bar-bg">
+                    <div
+                      className="progress-bar-fill"
+                      style={{ width: `${progressPercent}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
-
-      {/* District List Header */}
-      <div className="section-title">
-        <span>İlçe Durak Yoğunluğu ({districtsList.length})</span>
-        <BarChart2 size={16} />
-      </div>
-
-      {/* District Scrollable List */}
-      <div className="district-list-container">
-        {districtsList.map((district) => {
-          const isSelected = selectedDistrict && selectedDistrict.ilce_id === district.ilce_id;
-          const percentage = ((district.durak_sayisi / totalStopsCount) * 100).toFixed(1);
-          const progressPercent = Math.round((district.durak_sayisi / maxDistrictCount) * 100);
-
-          return (
-            <div
-              key={district.ilce_id}
-              className={`district-item ${isSelected ? 'active' : ''}`}
-              onClick={() => onSelectDistrict(isSelected ? null : district)}
-            >
-              <div className="district-row">
-                <span className="district-name">{district.ilce_adi}</span>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>%{percentage}</span>
-                  <span className="district-count">{district.durak_sayisi}</span>
-                </div>
-              </div>
-
-              {/* Visual Progress Bar */}
-              <div className="progress-bar-bg">
-                <div
-                  className="progress-bar-fill"
-                  style={{ width: `${progressPercent}%` }}
-                />
-              </div>
-            </div>
-          );
-        })}
-      </div>
     </aside>
   );
 }

@@ -504,6 +504,101 @@ body, html, #root {
   background: rgba(59, 130, 246, 0.2);
 }
 
+/* District Detail & Stop List Styles */
+.district-detail-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(6, 182, 212, 0.2));
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  border-radius: 12px;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-color);
+  color: #94a3b8;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: fit-content;
+  transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+  color: #ffffff;
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.stop-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.stop-item:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
+  transform: translateX(2px);
+}
+
+.stop-item.active {
+  background: rgba(59, 130, 246, 0.3);
+  border-color: var(--primary);
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.stop-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stop-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.stop-code {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  background: rgba(56, 189, 248, 0.15);
+  border-radius: 4px;
+  color: #7dd3fc;
+}
+
+.stop-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: #94a3b8;
+}
+
+.stop-badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.68rem;
+  color: #cbd5e1;
+}
+
 @media (max-width: 768px) {
   .sidebar-panel {
     width: calc(100vw - 32px);

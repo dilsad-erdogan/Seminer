@@ -88,6 +88,7 @@ export default function App() {
         }}
         collapsed={sidebarCollapsed}
         allStops={stops}
+        selectedStop={selectedStop}
         onSelectStop={(stop) => {
           setSelectedStop(stop);
         }}
