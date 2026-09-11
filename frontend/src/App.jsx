@@ -99,6 +99,10 @@ export default function App() {
         stops={stops}
         districtMap={districtMap}
         selectedDistrict={selectedDistrict}
+        onSelectDistrict={(district) => {
+          setSelectedDistrict(district);
+          setSelectedStop(null);
+        }}
         activeTileLayer={activeTileLayer}
         selectedStop={selectedStop}
         resetKey={resetKey}

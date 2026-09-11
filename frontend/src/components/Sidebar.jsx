@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, MapPin, X, Filter, ChevronRight, BarChart2, ArrowLeft, Bus } from 'lucide-react';
+import { getDistrictColor } from '../utils/colors';
 
 export default function Sidebar({
   districtsList = [],
@@ -129,8 +130,16 @@ export default function Sidebar({
             </button>
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '2px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <MapPin size={18} color="#3b82f6" />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span
+                  style={{
+                    width: '12px',
+                    height: '12px',
+                    borderRadius: '50%',
+                    backgroundColor: getDistrictColor(selectedDistrict.ilce_id),
+                    boxShadow: `0 0 8px ${getDistrictColor(selectedDistrict.ilce_id)}`
+                  }}
+                />
                 <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff' }}>
                   {selectedDistrict.ilce_adi}
                 </h3>
@@ -206,6 +215,7 @@ export default function Sidebar({
             {districtsList.map((district) => {
               const percentage = ((district.durak_sayisi / totalStopsCount) * 100).toFixed(1);
               const progressPercent = Math.round((district.durak_sayisi / maxDistrictCount) * 100);
+              const districtColor = getDistrictColor(district.ilce_id);
 
               return (
                 <div
@@ -214,18 +224,33 @@ export default function Sidebar({
                   onClick={() => onSelectDistrict(district)}
                 >
                   <div className="district-row">
-                    <span className="district-name">{district.ilce_adi}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span
+                        style={{
+                          width: '9px',
+                          height: '9px',
+                          borderRadius: '50%',
+                          backgroundColor: districtColor,
+                          boxShadow: `0 0 6px ${districtColor}`
+                        }}
+                      />
+                      <span className="district-name">{district.ilce_adi}</span>
+                    </div>
+
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>%{percentage}</span>
                       <span className="district-count">{district.durak_sayisi}</span>
                     </div>
                   </div>
 
-                  {/* Visual Progress Bar */}
+                  {/* Visual Progress Bar matching district color */}
                   <div className="progress-bar-bg">
                     <div
                       className="progress-bar-fill"
-                      style={{ width: `${progressPercent}%` }}
+                      style={{
+                        width: `${progressPercent}%`,
+                        background: `linear-gradient(to right, ${districtColor}, ${districtColor}bb)`
+                      }}
                     />
                   </div>
                 </div>
