@@ -1,0 +1,207 @@
+{
+  "Avcılar": {
+    "ilce_id": "1185",
+    "ilce_adi": "Avcılar",
+    "durak_sayisi": 1045
+  },
+  "Güngören": {
+    "ilce_id": "1835",
+    "ilce_adi": "Güngören",
+    "durak_sayisi": 809
+  },
+  "Beyoğlu": {
+    "ilce_id": "1604",
+    "ilce_adi": "Beyoğlu",
+    "durak_sayisi": 799
+  },
+  "Kadıköy": {
+    "ilce_id": "1852",
+    "ilce_adi": "Kadıköy",
+    "durak_sayisi": 709
+  },
+  "Sultangazi": {
+    "ilce_id": "2048",
+    "ilce_adi": "Sultangazi",
+    "durak_sayisi": 697
+  },
+  "Şişli": {
+    "ilce_id": "2050",
+    "ilce_adi": "Şişli",
+    "durak_sayisi": 682
+  },
+  "Esenler": {
+    "ilce_id": "1708",
+    "ilce_adi": "Esenler",
+    "durak_sayisi": 645
+  },
+  "Bakırköy": {
+    "ilce_id": "1325",
+    "ilce_adi": "Bakırköy",
+    "durak_sayisi": 563
+  },
+  "Silivri": {
+    "ilce_id": "2015",
+    "ilce_adi": "Silivri",
+    "durak_sayisi": 537
+  },
+  "Sancaktepe": {
+    "ilce_id": "2012",
+    "ilce_adi": "Sancaktepe",
+    "durak_sayisi": 530
+  },
+  "Beylikdüzü": {
+    "ilce_id": "1449",
+    "ilce_adi": "Beylikdüzü",
+    "durak_sayisi": 469
+  },
+  "Üsküdar": {
+    "ilce_id": "2053",
+    "ilce_adi": "Üsküdar",
+    "durak_sayisi": 454
+  },
+  "Gaziosmanpaşa": {
+    "ilce_id": "1823",
+    "ilce_adi": "Gaziosmanpaşa",
+    "durak_sayisi": 453
+  },
+  "Şile": {
+    "ilce_id": "2049",
+    "ilce_adi": "Şile",
+    "durak_sayisi": 441
+  },
+  "Zeytinburnu": {
+    "ilce_id": "2054",
+    "ilce_adi": "Zeytinburnu",
+    "durak_sayisi": 409
+  },
+  "Eyüpsultan": {
+    "ilce_id": "1782",
+    "ilce_adi": "Eyüpsultan",
+    "durak_sayisi": 407
+  },
+  "Beykoz": {
+    "ilce_id": "1421",
+    "ilce_adi": "Beykoz",
+    "durak_sayisi": 398
+  },
+  "Tuzla": {
+    "ilce_id": "2051",
+    "ilce_adi": "Tuzla",
+    "durak_sayisi": 374
+  },
+  "Ümraniye": {
+    "ilce_id": "2052",
+    "ilce_adi": "Ümraniye",
+    "durak_sayisi": 364
+  },
+  "Sarıyer": {
+    "ilce_id": "2014",
+    "ilce_adi": "Sarıyer",
+    "durak_sayisi": 362
+  },
+  "Çatalca": {
+    "ilce_id": "1659",
+    "ilce_adi": "Çatalca",
+    "durak_sayisi": 356
+  },
+  "Bahçelievler": {
+    "ilce_id": "1237",
+    "ilce_adi": "Bahçelievler",
+    "durak_sayisi": 321
+  },
+  "Küçükçekmece": {
+    "ilce_id": "2004",
+    "ilce_adi": "Küçükçekmece",
+    "durak_sayisi": 301
+  },
+  "Büyükçekmece": {
+    "ilce_id": "1622",
+    "ilce_adi": "Büyükçekmece",
+    "durak_sayisi": 292
+  },
+  "Fatih": {
+    "ilce_id": "1810",
+    "ilce_adi": "Fatih",
+    "durak_sayisi": 290
+  },
+  "Ataşehir": {
+    "ilce_id": "1183",
+    "ilce_adi": "Ataşehir",
+    "durak_sayisi": 273
+  },
+  "Kartal": {
+    "ilce_id": "2003",
+    "ilce_adi": "Kartal",
+    "durak_sayisi": 242
+  },
+  "Başakşehir": {
+    "ilce_id": "1327",
+    "ilce_adi": "Başakşehir",
+    "durak_sayisi": 242
+  },
+  "Sancaktepe (Çevre)": {
+    "ilce_id": "2055",
+    "ilce_adi": "Sancaktepe (Çevre)",
+    "durak_sayisi": 232
+  },
+  "Maltepe": {
+    "ilce_id": "2005",
+    "ilce_adi": "Maltepe",
+    "durak_sayisi": 222
+  },
+  "Arnavutköy": {
+    "ilce_id": "1166",
+    "ilce_adi": "Arnavutköy",
+    "durak_sayisi": 221
+  },
+  "Çekmeköy": {
+    "ilce_id": "1663",
+    "ilce_adi": "Çekmeköy",
+    "durak_sayisi": 211
+  },
+  "Bayrampaşa": {
+    "ilce_id": "1336",
+    "ilce_adi": "Bayrampaşa",
+    "durak_sayisi": 203
+  },
+  "Bağcılar": {
+    "ilce_id": "1186",
+    "ilce_adi": "Bağcılar",
+    "durak_sayisi": 160
+  },
+  "Sultanbeyli": {
+    "ilce_id": "2016",
+    "ilce_adi": "Sultanbeyli",
+    "durak_sayisi": 153
+  },
+  "Esenyurt": {
+    "ilce_id": "1739",
+    "ilce_adi": "Esenyurt",
+    "durak_sayisi": 139
+  },
+  "Pendik": {
+    "ilce_id": "2010",
+    "ilce_adi": "Pendik",
+    "durak_sayisi": 122
+  },
+  "Kağıthane": {
+    "ilce_id": "1886",
+    "ilce_adi": "Kağıthane",
+    "durak_sayisi": 114
+  },
+  "Gebze / Çevre Sınır": {
+    "ilce_id": "2059",
+    "ilce_adi": "Gebze / Çevre Sınır",
+    "durak_sayisi": 73
+  },
+  "Çorlu / Çevre Sınır": {
+    "ilce_id": "2060",
+    "ilce_adi": "Çorlu / Çevre Sınır",
+    "durak_sayisi": 37
+  },
+  "Beşiktaş": {
+    "ilce_id": "1338",
+    "ilce_adi": "Beşiktaş",
+    "durak_sayisi": 10
+  }
+}
