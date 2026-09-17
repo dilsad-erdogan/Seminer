@@ -16,6 +16,11 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [resetKey, setResetKey] = useState(0);
 
+  // Stop Selection States
+  const [selectedStartStop, setSelectedStartStop] = useState(null);
+  const [selectedEndStop, setSelectedEndStop] = useState(null);
+  const [selectedIntermediateStops, setSelectedIntermediateStops] = useState([]);
+
   // Fetch JSON datasets on initial load
   useEffect(() => {
     async function loadDatasets() {
@@ -52,9 +57,63 @@ export default function App() {
     loadDatasets();
   }, []);
 
+  // Handle Random Stop Generation
+  const handleGenerateRandomStops = (requestedCount = 6) => {
+    const pool = selectedDistrict
+      ? stops.filter(s => String(s.ilce_id) === String(selectedDistrict.ilce_id))
+      : stops;
+
+    if (!pool || pool.length < 2) {
+      alert('Seçilen bölgede yeterli durak bulunamadı!');
+      return;
+    }
+
+    const count = Math.min(requestedCount, pool.length);
+    // Fisher-Yates shuffle copy of pool
+    const shuffled = [...pool].sort(() => 0.5 - Math.random());
+    const pickedStops = shuffled.slice(0, count);
+
+    const start = pickedStops[0];
+    const end = pickedStops[pickedStops.length - 1];
+    const intermediates = pickedStops.slice(1, pickedStops.length - 1);
+
+    setSelectedStartStop(start);
+    setSelectedEndStop(end);
+    setSelectedIntermediateStops(intermediates);
+
+    // LOG TO CONSOLE
+    console.log('%c==============================================', 'color: #38bdf8; font-weight: bold;');
+    console.log('%c🎲 [RASTGELE SEÇİLEN DURAKLAR SONUCU]', 'color: #38bdf8; font-size: 14px; font-weight: bold;');
+    console.log('📍 Hedef Bölge:', selectedDistrict ? selectedDistrict.ilce_adi : 'Tüm İstanbul');
+    console.log('🔢 Toplam Durak Sayısı:', count);
+    console.log('🟢 BAŞLANGIÇ DURAĞI:', start);
+    console.log('🔴 BİTİŞ DURAĞI:', end);
+    console.log(`🔵 ARA DURAKLAR (${intermediates.length} Adet):`, intermediates);
+    console.log('📋 Sıralı Bütün Rota Durakları Dizisi:', [start, ...intermediates, end]);
+    console.log('%c==============================================', 'color: #38bdf8; font-weight: bold;');
+  };
+
+  // Handle Manual Log
+  const handleLogManualStops = () => {
+    console.log('%c==============================================', 'color: #10b981; font-weight: bold;');
+    console.log('%c✋ [MANUEL SEÇİLEN DURAKLAR SONUCU]', 'color: #10b981; font-size: 14px; font-weight: bold;');
+    console.log('🟢 BAŞLANGIÇ DURAĞI:', selectedStartStop || 'Henüz Seçilmedi');
+    console.log('🔴 BİTİŞ DURAĞI:', selectedEndStop || 'Henüz Seçilmedi');
+    console.log(`🔵 ARA DURAKLAR (${selectedIntermediateStops.length} Adet):`, selectedIntermediateStops);
+    console.log('%c==============================================', 'color: #10b981; font-weight: bold;');
+  };
+
+  // Clear selections
+  const handleClearSelection = () => {
+    setSelectedStartStop(null);
+    setSelectedEndStop(null);
+    setSelectedIntermediateStops([]);
+  };
+
   const handleResetView = () => {
     setSelectedDistrict(null);
     setSelectedStop(null);
+    handleClearSelection();
     setResetKey(prev => prev + 1);
   };
 
@@ -92,6 +151,17 @@ export default function App() {
         onSelectStop={(stop) => {
           setSelectedStop(stop);
         }}
+        // Stop Selector props
+        selectedStartStop={selectedStartStop}
+        selectedEndStop={selectedEndStop}
+        selectedIntermediateStops={selectedIntermediateStops}
+        onSetStartStop={setSelectedStartStop}
+        onSetEndStop={setSelectedEndStop}
+        onAddIntermediateStop={(stop) => setSelectedIntermediateStops(prev => [...prev, stop])}
+        onRemoveIntermediateStop={(idx) => setSelectedIntermediateStops(prev => prev.filter((_, i) => i !== idx))}
+        onGenerateRandomStops={handleGenerateRandomStops}
+        onLogManualStops={handleLogManualStops}
+        onClearSelection={handleClearSelection}
       />
 
       {/* Interactive Map */}
@@ -106,6 +176,12 @@ export default function App() {
         activeTileLayer={activeTileLayer}
         selectedStop={selectedStop}
         resetKey={resetKey}
+        selectedStartStop={selectedStartStop}
+        selectedEndStop={selectedEndStop}
+        selectedIntermediateStops={selectedIntermediateStops}
+        onSetStartStop={setSelectedStartStop}
+        onSetEndStop={setSelectedEndStop}
+        onAddIntermediateStop={(stop) => setSelectedIntermediateStops(prev => [...prev, stop])}
       />
     </div>
   );

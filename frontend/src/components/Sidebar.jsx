@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Search, MapPin, X, Filter, ChevronRight, BarChart2, ArrowLeft, Bus } from 'lucide-react';
+import { Search, MapPin, X, Filter, ChevronRight, BarChart2, ArrowLeft, Bus, Target } from 'lucide-react';
 import { getDistrictColor } from '../utils/colors';
+import StopSelectorPanel from './StopSelectorPanel';
 
 export default function Sidebar({
   districtsList = [],
@@ -10,8 +11,20 @@ export default function Sidebar({
   collapsed = false,
   allStops = [],
   selectedStop = null,
-  onSelectStop = () => { }
+  onSelectStop = () => { },
+  // Stop selection props
+  selectedStartStop = null,
+  selectedEndStop = null,
+  selectedIntermediateStops = [],
+  onSetStartStop = () => { },
+  onSetEndStop = () => { },
+  onAddIntermediateStop = () => { },
+  onRemoveIntermediateStop = () => { },
+  onGenerateRandomStops = () => { },
+  onLogManualStops = () => { },
+  onClearSelection = () => { }
 }) {
+  const [activeTab, setActiveTab] = useState('analysis'); // 'analysis' | 'selector'
   const [globalSearchTerm, setGlobalSearchTerm] = useState('');
   const [globalSearchResults, setGlobalSearchResults] = useState([]);
   const [districtFilterTerm, setDistrictFilterTerm] = useState('');
@@ -57,63 +70,102 @@ export default function Sidebar({
 
   return (
     <aside className={`sidebar-panel ${collapsed ? 'collapsed' : ''}`}>
-      {/* Global Search Input Box */}
-      <div className="search-box">
-        <Search className="search-icon" size={18} />
-        <input
-          type="text"
-          className="search-input"
-          placeholder="Tüm İstanbul'da durak ara..."
-          value={globalSearchTerm}
-          onChange={handleGlobalSearchChange}
+      {/* Top Sidebar Tab Navigation */}
+      <div className="sidebar-tab-nav">
+        <button
+          className={`sidebar-tab-btn ${activeTab === 'analysis' ? 'active' : ''}`}
+          onClick={() => setActiveTab('analysis')}
+        >
+          <BarChart2 size={16} />
+          <span>İlçe Analizi</span>
+        </button>
+        <button
+          className={`sidebar-tab-btn ${activeTab === 'selector' ? 'active' : ''}`}
+          onClick={() => setActiveTab('selector')}
+        >
+          <Target size={16} />
+          <span>Durak Seçimi</span>
+        </button>
+      </div>
+
+      {activeTab === 'selector' ? (
+        /* STOP SELECTOR TAB PANEL */
+        <StopSelectorPanel
+          selectedDistrict={selectedDistrict}
+          districtsList={districtsList}
+          allStops={allStops}
+          onSelectDistrict={onSelectDistrict}
+          selectedStartStop={selectedStartStop}
+          selectedEndStop={selectedEndStop}
+          selectedIntermediateStops={selectedIntermediateStops}
+          onSetStartStop={onSetStartStop}
+          onSetEndStop={onSetEndStop}
+          onAddIntermediateStop={onAddIntermediateStop}
+          onRemoveIntermediateStop={onRemoveIntermediateStop}
+          onGenerateRandomStops={onGenerateRandomStops}
+          onLogManualStops={onLogManualStops}
+          onClearSelection={onClearSelection}
         />
-        {globalSearchTerm && (
-          <X
-            size={16}
-            style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', color: '#94a3b8' }}
-            onClick={() => { setGlobalSearchTerm(''); setGlobalSearchResults([]); }}
-          />
-        )}
+      ) : (
+        /* ANALYSIS TAB PANEL */
+        <>
+          {/* Global Search Input Box */}
+          <div className="search-box">
+            <Search className="search-icon" size={18} />
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Tüm İstanbul'da durak ara..."
+              value={globalSearchTerm}
+              onChange={handleGlobalSearchChange}
+            />
+            {globalSearchTerm && (
+              <X
+                size={16}
+                style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', color: '#94a3b8' }}
+                onClick={() => { setGlobalSearchTerm(''); setGlobalSearchResults([]); }}
+              />
+            )}
 
-        {/* Global Autocomplete Dropdown */}
-        {globalSearchResults.length > 0 && (
-          <div className="search-results-dropdown">
-            {globalSearchResults.map(stop => (
-              <div
-                key={stop.id || stop.durak_kodu}
-                className="search-result-item"
-                onClick={() => handleSelectSearchResult(stop)}
-              >
-                <div>
-                  <strong style={{ color: '#38bdf8' }}>{stop.adi}</strong>
-                  <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Kod: {stop.durak_kodu} | Tip: {stop.durak_tipi}</div>
-                </div>
-                <ChevronRight size={14} color="#64748b" />
+            {/* Global Autocomplete Dropdown */}
+            {globalSearchResults.length > 0 && (
+              <div className="search-results-dropdown">
+                {globalSearchResults.map(stop => (
+                  <div
+                    key={stop.id || stop.durak_kodu}
+                    className="search-result-item"
+                    onClick={() => handleSelectSearchResult(stop)}
+                  >
+                    <div>
+                      <strong style={{ color: '#38bdf8' }}>{stop.adi}</strong>
+                      <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Kod: {stop.durak_kodu} | Tip: {stop.durak_tipi}</div>
+                    </div>
+                    <ChevronRight size={14} color="#64748b" />
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
-        )}
-      </div>
 
-      {/* KPI Stats Cards */}
-      <div className="stats-grid">
-        <div className="stat-card">
-          <span className="stat-title">Toplam Durak</span>
-          <div className="stat-value">
-            {totalStopsCount.toLocaleString('tr-TR')}
-            <span className="stat-sub">aktif</span>
+          {/* KPI Stats Cards */}
+          <div className="stats-grid">
+            <div className="stat-card">
+              <span className="stat-title">Toplam Durak</span>
+              <div className="stat-value">
+                {totalStopsCount.toLocaleString('tr-TR')}
+                <span className="stat-sub">aktif</span>
+              </div>
+            </div>
+            <div className="stat-card">
+              <span className="stat-title">Anakara İlçe</span>
+              <div className="stat-value">
+                {summaryStats.tespit_edilen_ilce_sayisi || 41}
+                <span className="stat-sub">bölge</span>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="stat-card">
-          <span className="stat-title">Anakara İlçe</span>
-          <div className="stat-value">
-            {summaryStats.tespit_edilen_ilce_sayisi || 41}
-            <span className="stat-sub">bölge</span>
-          </div>
-        </div>
-      </div>
 
-      {/* CONDITIONAL CONTENT VIEW */}
+          {/* CONDITIONAL CONTENT VIEW */}
       {selectedDistrict ? (
         /* DISTRICT DETAIL & STOP LIST VIEW */
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 1, overflow: 'hidden' }}>
@@ -258,6 +310,8 @@ export default function Sidebar({
             })}
           </div>
         </div>
+      )}
+        </>
       )}
     </aside>
   );
